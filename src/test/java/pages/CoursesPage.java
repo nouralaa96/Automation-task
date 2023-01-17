@@ -21,8 +21,9 @@ public class CoursesPage {
     By courseSubjectLocator = By.id("courseSubject");
     By selectGradeLocator = By.xpath(" //em[@class='lms-margin-end-5 lms-position-relative-imp']");
     By selectYearLocator = By.id("courseGrade");
-    By courseTeacherLocator = By.xpath("//*[@id=\"teacherOnBehalf\"]/input[1]");
-
+    By courseTeacherLocator = By.xpath("//span[@class='ui-select-placeholder text-muted']");
+    By courseCompletionLocator = By.xpath("//i[@class='lms-position-relative-imp']");
+    By courseCreateLocator = By.id("btnSaveAsDraftCourse");
 
 
     public CoursesPage(WebDriver driver) {
@@ -35,7 +36,7 @@ public class CoursesPage {
         wait.until(ExpectedConditions.elementToBeClickable(coursesLocator)).click();
     }
 
-    public void createCourse(String CourseName, String subject, String grade,String courseTeacher) {
+    public void createCourse(String CourseName, String subject, String grade, String courseTeacher) {
         driver.findElement(addCourseLocator).click();
         wait.until(ExpectedConditions.elementToBeClickable(courseNameLocator)).sendKeys(CourseName);
         Select drpSubject = new Select(driver.findElement(courseSubjectLocator));
@@ -44,11 +45,15 @@ public class CoursesPage {
         Select drpGrade = new Select(driver.findElement(selectYearLocator));
         drpGrade.selectByVisibleText(grade);
 
-//        JavascriptExecutor js = (JavascriptExecutor) driver;
-//        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-        wait.until(ExpectedConditions.elementToBeClickable(courseTeacherLocator)).sendKeys(courseTeacher);
-//        driver.findElement(courseTeacherLocator).sendKeys(courseTeacher);
-   //     driver.findElement(By.id("save-course-button")).click();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();",
+                driver.findElement(By.xpath("//span[@class='ui-select-placeholder text-muted']")));
+
+      //  wait.until(ExpectedConditions.elementToBeClickable(courseTeacherLocator)).sendKeys(courseTeacher);
+        //  driver.findElement(courseTeacherLocator).sendKeys(courseTeacher);
+
+        driver.findElement(courseCompletionLocator).click();
+        driver.findElement(courseCreateLocator).click();
     }
 
     public boolean isTestCourseDisplayed() {
