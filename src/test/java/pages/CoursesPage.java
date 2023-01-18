@@ -27,7 +27,7 @@ public class CoursesPage {
     By courseCompletionLocator = By.xpath("//i[@class='lms-position-relative-imp']");
     By courseCreateLocator = By.id("btnSaveAsDraftCourse");
     By sortCourseLocator = By.id("CoursesOrderBy");
-
+    By getCreatredCourseLocator = By.xpath("//*[@id=\"lnkListCourseSelcted\"][1]");
 
     public CoursesPage(WebDriver driver) {
         this.driver = driver;
@@ -39,9 +39,9 @@ public class CoursesPage {
         wait.until(ExpectedConditions.elementToBeClickable(coursesLocator)).click();
     }
 
-    public void createCourse(String CourseName, String subject, String grade, String courseTeacher) {
+    public void createCourse(String courseName, String subject, String grade) {
         driver.findElement(addCourseLocator).click();
-        wait.until(ExpectedConditions.elementToBeClickable(courseNameLocator)).sendKeys(CourseName);
+        wait.until(ExpectedConditions.elementToBeClickable(courseNameLocator)).sendKeys(courseName);
         Select drpSubject = new Select(driver.findElement(courseSubjectLocator));
         drpSubject.selectByVisibleText(subject);
         driver.findElement(selectGradeLocator).click();
@@ -57,7 +57,7 @@ public class CoursesPage {
         driver.findElement(courseCreateLocator).click();
     }
 
-    public boolean isTestCourseDisplayed() {
+    public String isTestCourseCreated()  {
         // wait to the creation of cousre
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("courseNameView")));
         // go to the course page
@@ -66,10 +66,9 @@ public class CoursesPage {
         wait.until(ExpectedConditions.elementToBeClickable(sortCourseLocator));
         Select drpSort = new Select(driver.findElement(sortCourseLocator));
         drpSort.selectByVisibleText("Creation Date Descending");
-
-          // String text = driver.findElement(By.xpath("//*[text()='Create Test Course1']")).getText();
-         //  System.out.println(text+"+6sdsd");
-        return wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("(//a[normalize-space()='Create Test Course1'])[1]")))).isDisplayed();
+        //get the created course element and get is text
+        WebElement createdCourse = wait.until(ExpectedConditions.visibilityOfElementLocated(getCreatredCourseLocator));
+        return createdCourse.getText();
     }
 }
 

@@ -12,29 +12,37 @@ import pages.LoginPage;
 
 public class CourseCreationTest {
 
-        private WebDriver driver;
-        private LoginPage loginPage;
-        private CoursesPage coursesPage;
-        @BeforeMethod
-        public void setUp() {
-            // Set up web driver
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
-            // navigate to this website
-            driver.get("https://swinji.azurewebsites.net");
-            driver.manage().window().maximize();
-            loginPage = new LoginPage(driver);
-            coursesPage = new CoursesPage(driver);
-        }
-        @Test
-        public void testCourseCreation()  {
-            loginPage.login("testregister@aaa.com", "Wakram_123");
-            coursesPage.openCourses();
-            coursesPage.createCourse("Create Test Course1", "Technology Information","1","nada rehan");
-            Assert.assertTrue(coursesPage.isTestCourseDisplayed(), "Course title is not displayed");
-        }
-        @AfterMethod
-        public void tearDown() {
-           // driver.quit();
-        }
+    private WebDriver driver;
+    private LoginPage loginPage;
+    private CoursesPage coursesPage;
+
+    @BeforeMethod
+    public void setUp() {
+        // Set up web driver
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        // navigate to this website
+        driver.get("https://swinji.azurewebsites.net");
+        driver.manage().window().maximize();
+        loginPage = new LoginPage(driver);
+        coursesPage = new CoursesPage(driver);
     }
+
+    @Test
+    public void testCourseCreation() {
+        String courseName = "Create Test Course1";
+        String subject = "Technology Information";
+        String grade = "1";
+        String username = "testregister@aaa.com";
+        String password = "Wakram_123";
+        loginPage.login(username,password );
+        coursesPage.openCourses();
+        coursesPage.createCourse(courseName, subject, grade);
+        Assert.assertEquals(coursesPage.isTestCourseCreated(), courseName);
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        driver.quit();
+    }
+}
