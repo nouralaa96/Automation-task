@@ -27,10 +27,10 @@ public class CourseCreationTest {
             coursesPage = new CoursesPage(driver);
         }
         @Test
-        public void testCourseCreation() {
+        public void testCourseCreation()  {
             loginPage.login("testregister@aaa.com", "Wakram_123");
             coursesPage.openCourses();
-            coursesPage.createCourse("Create Test Course", "Technology Information","1","nada rehan");
+            coursesPage.createCourse("Create Test Course1", "Technology Information","1","nada rehan");
             Assert.assertTrue(coursesPage.isTestCourseDisplayed(), "Course title is not displayed");
         }
         @AfterMethod

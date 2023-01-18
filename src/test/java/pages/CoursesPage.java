@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,9 +22,11 @@ public class CoursesPage {
     By courseSubjectLocator = By.id("courseSubject");
     By selectGradeLocator = By.xpath(" //em[@class='lms-margin-end-5 lms-position-relative-imp']");
     By selectYearLocator = By.id("courseGrade");
-    By courseTeacherLocator = By.xpath("//span[@class='ui-select-placeholder text-muted']");
+    By courseTeacherSearchLocator = By.xpath("//i[@role='button']");
+    By courseTeacherLocator = By.id("ui-select-choices-row-0-0");
     By courseCompletionLocator = By.xpath("//i[@class='lms-position-relative-imp']");
     By courseCreateLocator = By.id("btnSaveAsDraftCourse");
+    By sortCourseLocator = By.id("CoursesOrderBy");
 
 
     public CoursesPage(WebDriver driver) {
@@ -46,18 +49,27 @@ public class CoursesPage {
         drpGrade.selectByVisibleText(grade);
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();",
-                driver.findElement(By.xpath("//span[@class='ui-select-placeholder text-muted']")));
-
-      //  wait.until(ExpectedConditions.elementToBeClickable(courseTeacherLocator)).sendKeys(courseTeacher);
-        //  driver.findElement(courseTeacherLocator).sendKeys(courseTeacher);
+        js.executeScript("window.scrollBy(0, 500);");
+        wait.until(ExpectedConditions.elementToBeClickable(courseTeacherSearchLocator)).click();
+        driver.findElement(courseTeacherLocator).click();
 
         driver.findElement(courseCompletionLocator).click();
         driver.findElement(courseCreateLocator).click();
     }
 
     public boolean isTestCourseDisplayed() {
-        return driver.findElement(By.xpath("//td[text()='Test Course']")).isDisplayed();
+        // wait to the creation of cousre
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("courseNameView")));
+        // go to the course page
+        openCourses();
+        //go to the sort drop menu to get the latest courses
+        wait.until(ExpectedConditions.elementToBeClickable(sortCourseLocator));
+        Select drpSort = new Select(driver.findElement(sortCourseLocator));
+        drpSort.selectByVisibleText("Creation Date Descending");
+
+          // String text = driver.findElement(By.xpath("//*[text()='Create Test Course1']")).getText();
+         //  System.out.println(text+"+6sdsd");
+        return wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("(//a[normalize-space()='Create Test Course1'])[1]")))).isDisplayed();
     }
 }
 
