@@ -15,6 +15,11 @@ public class CourseCreationTest {
     private WebDriver driver;
     private LoginPage loginPage;
     private CoursesPage coursesPage;
+    String courseName = "Create Test Course1";
+    String subject = "Technology Information";
+    String grade = "1";
+    String username = "testregister@aaa.com";
+    String password = "Wakram_123";
 
     @BeforeMethod
     public void setUp() {
@@ -30,11 +35,7 @@ public class CourseCreationTest {
 
     @Test
     public void testCourseCreation() {
-        String courseName = "Create Test Course1";
-        String subject = "Technology Information";
-        String grade = "1";
-        String username = "testregister@aaa.com";
-        String password = "Wakram_123";
+
         loginPage.login(username,password );
         coursesPage.openCourses();
         coursesPage.createCourse(courseName, subject, grade);
